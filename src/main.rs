@@ -8,29 +8,27 @@ usage: rpc <hostname> <method> [<json_file>]
 
 pub fn main() {
     match run() {
-        Ok(_) => (),
+        Ok(json) => println!("{}", json),
         Err(e) => println!("Error: {:?}", e),
     };
 }
 
-pub fn run() -> Result<(), Box<dyn std::error::Error>> {
+pub fn run() -> Result<String, Box<dyn std::error::Error>> {
     let args: Vec<String> = std::env::args().collect();
-
     let hostname: &str = args.get(1).expect(USAGE);
     let method: &str = args.get(2).expect(USAGE);
 
-    let json: String = match args.get(3) {
-        Some(filename) => read_file(PathBuf::from(filename))?,
-        None => "".to_string(),
+    let json: serde_json::Value = match args.get(3) {
+        Some(filename) => read_json(filename)?,
+        None => serde_json::from_str("{}")?,
     };
 
-    let json_result = rpc::rpc_request(hostname, method, serde_json::json!(json))?;
-    let result = serde_json::from_str(&json_result)?;
-    // Ok(result) // fix
+    Ok(rpc::rpc_request(hostname, method, json)?)
+}
 
-    println!("{:?}", result);
-
-    Ok(())
+pub fn read_json(filename: &str) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
+    let file_contents: String = read_file(PathBuf::from(filename))?;
+    Ok(serde_json::from_str(&file_contents)?)
 }
 
 pub fn read_file(pathbuf: PathBuf) -> Result<String, failure::Error> {

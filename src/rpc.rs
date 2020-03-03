@@ -7,13 +7,13 @@ pub(crate) fn socket_request(
 ) -> Result<String, Box<dyn std::error::Error>> {
     use websocket::{ClientBuilder, Message};
 
-    // println!("request -> {}", request);
+    println!("request -> {}", request);
 
     let mut client = ClientBuilder::new(host)?.connect_insecure()?;
     client.send_message(&Message::text(request))?; // Send message
 
     if let websocket::OwnedMessage::Text(response) = client.recv_message()? {
-        // println!("response -> {}", response);
+        println!("response -> {}", response);
         Ok(response)
     } else {
         // todo: Err here
@@ -49,4 +49,5 @@ pub(crate) struct RPCResponse<T> {
 pub(crate) struct RPCErrorCode {
     pub code: i32,
     pub message: String,
+    pub data: Option<String>,
 }
