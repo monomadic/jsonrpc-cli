@@ -1,4 +1,4 @@
-json-rpc-get
+jsonrpc-cli
 ============
 
 Simple cli tool for testing output from JSON RPC 2.0 socket services. Pipe the output into a json tool like jq, [gron](https://github.com/TomNomNom/gron), [jid](https://github.com/simeji/jid) or peco for extra coolness.
