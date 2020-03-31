@@ -5,6 +5,11 @@ Simple cli tool for testing output from JSON RPC 2.0 socket services. Pipe the o
 
 Think of it like curl, but for JSON RPC2.0 over websockets.
 
+## Installation
+```bash
+cargo install --git https://github.com/monomadic/jsonrpc-cli.git
+```
+
 ### CLI instructions
 
 ```bash
